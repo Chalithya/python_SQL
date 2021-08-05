@@ -1,12 +1,26 @@
-import mysql.connector
-
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd=""
-)
+# import mysql.connector
+import sys
+import pyodbc 
 
 
-mycursor = db.cursor()
+conn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=FLOKI;'
+                      'Database=testDB;'
+                      'Trusted_Connection=yes;')
 
-mycursor.execute("CREATE DATABASE pythonDB")
+cursor = conn.cursor()
+cursor.execute('SELECT * FROM testDB.dbo.Take')
+
+for row in cursor:
+    print(row)
+
+# db = mysql.connector.connect(
+#     host="localhost",
+#     user="newuser",
+#     passwd=""
+# )
+
+
+# mycursor = db.cursor()
+
+# mycursor.execute("CREATE DATABASE pythonDB")
