@@ -12,18 +12,29 @@ def parse_args():
 
 
 def db_connection():   
-    conn = pymssql.connect(server='FLOKI', user='', password='', database='testDB')
+    try:
+        conn = pymssql.connect(server='FLOKI', user='', password='', database='testDB')
+    except:
+        print("Db connection Error") 
     return conn
 
 
 
 def select_all(conn, tbl_name: str):
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM testDB.dbo.{}'.format(tbl_name))
-    for row in cursor:
-        print(row)
+    try:
+        # cursor = conn.cursor()
+        with conn.cursor() as cursor:        
+            cursor.execute('SELECT * FROM testDB.dbo.{}'.format(tbl_name))
+            table =[row for row in cursor]
+            print(*table, sep='\n')
 
+    except:
+        print("Error in the cursor") 
 
+    finally:
+        # cursor.close()
+        conn.close()
+        
 
 
 def main():
@@ -31,8 +42,12 @@ def main():
     arg_values = parse_args()
     select_all(conn, arg_values.name )
     
+    
 
 
 
 if __name__ == '__main__':
     main()
+
+
+
